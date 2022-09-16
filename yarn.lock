@@ -21037,6 +21037,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"magic.chat@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "magic.chat@workspace:."
+  dependencies:
+    "@types/chart.js": ^2.9.37
+    "@types/js-yaml": ^4.0.5
+    husky: ^7.0.4
+    turbo: ~1.2.16
+  languageName: unknown
+  linkType: soft
+
 "mailparser@npm:^3.4.0":
   version: 3.4.0
   resolution: "mailparser@npm:3.4.0"
@@ -27505,17 +27516,6 @@ __metadata:
   checksum: 006accc40578ee2beae382757c4ce2908a826b27e2b079efdcd2959ee544ddf210b7b5d7d5e80467807604244e7388427330f5c6d4cd61e6edaddc5773ccc393
   languageName: node
   linkType: hard
-
-"rocket.chat@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "rocket.chat@workspace:."
-  dependencies:
-    "@types/chart.js": ^2.9.37
-    "@types/js-yaml": ^4.0.5
-    husky: ^7.0.4
-    turbo: ~1.2.16
-  languageName: unknown
-  linkType: soft
 
 "rocketchat-services@workspace:apps/meteor/ee/server/services":
   version: 0.0.0-use.local
