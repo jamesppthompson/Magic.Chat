@@ -127,7 +127,7 @@ export default function UserForm({ formValues, formHandlers, availableRoles, app
 					),
 					[t, statusText, handleStatusText],
 				)}
-				{useMemo(
+				{/* {useMemo(
 					() => (
 						<Field>
 							<Field.Label>{t('Bio')}</Field.Label>
@@ -143,7 +143,7 @@ export default function UserForm({ formValues, formHandlers, availableRoles, app
 						</Field>
 					),
 					[bio, handleBio, t],
-				)}
+				)} */}
 				{useMemo(
 					() => (
 						<Field>

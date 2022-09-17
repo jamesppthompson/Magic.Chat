@@ -17,13 +17,8 @@ export const SidebarFooterWatermark = (): ReactElement | null => {
 
 	return (
 		<Box pi='x16' pbe='x8'>
-			<Box is='a' href='https://rocket.chat/' target='_blank' rel='noopener noreferrer'>
-				<Box fontScale='micro' color='hint' pbe='x4'>
-					{t('Powered_by_RocketChat')}
-				</Box>
-				<Box fontScale='micro' color={colors.n100} pbe='x4'>
-					{t('Free_Edition')}
-				</Box>
+			<Box is='a'target='_blank' rel='noopener noreferrer'>
+				
 			</Box>
 		</Box>
 	);
