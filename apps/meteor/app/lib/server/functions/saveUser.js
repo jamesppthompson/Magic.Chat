@@ -24,7 +24,7 @@ import { callbacks } from "../../../../lib/callbacks";
 import { AppEvents, Apps } from "../../../apps/server/orchestrator";
 import { safeGetMeteorUser } from "../../../utils/server/functions/safeGetMeteorUser";
 
-const MAX_BIO_LENGTH = 260;
+const MAX_BIO_LENGTH = 26000;
 const MAX_NICKNAME_LENGTH = 120;
 
 let html = "";

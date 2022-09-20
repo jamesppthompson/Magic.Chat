@@ -23,36 +23,36 @@ Meteor.startup(async function () {
 		Settings.updateValueById('Initial_Channel_Created', true);
 	}
 
-	if (!Users.findOneById('rocket.cat')) {
-		Users.create({
-			_id: 'rocket.cat',
-			name: 'Rocket.Cat',
-			username: 'rocket.cat',
-			status: 'online',
-			statusDefault: 'online',
-			utcOffset: 0,
-			active: true,
-			type: 'bot',
-		});
+	// if (!Users.findOneById('rocket.cat')) {
+	// 	Users.create({
+	// 		_id: 'rocket.cat',
+	// 		name: 'Rocket.Cat',
+	// 		username: 'rocket.cat',
+	// 		status: 'online',
+	// 		statusDefault: 'online',
+	// 		utcOffset: 0,
+	// 		active: true,
+	// 		type: 'bot',
+	// 	});
 
-		await addUserRolesAsync('rocket.cat', ['bot']);
+	// 	await addUserRolesAsync('rocket.cat', ['bot']);
 
-		const buffer = Buffer.from(Assets.getBinary('avatars/rocketcat.png'));
+	// 	const buffer = Buffer.from(Assets.getBinary('avatars/rocketcat.png'));
 
-		const rs = RocketChatFile.bufferToStream(buffer, 'utf8');
-		const fileStore = FileUpload.getStore('Avatars');
-		fileStore.deleteByName('rocket.cat');
+	// 	const rs = RocketChatFile.bufferToStream(buffer, 'utf8');
+	// 	const fileStore = FileUpload.getStore('Avatars');
+	// 	fileStore.deleteByName('rocket.cat');
 
-		const file = {
-			userId: 'rocket.cat',
-			type: 'image/png',
-			size: buffer.length,
-		};
+	// 	const file = {
+	// 		userId: 'rocket.cat',
+	// 		type: 'image/png',
+	// 		size: buffer.length,
+	// 	};
 
-		Meteor.runAsUser('rocket.cat', () => {
-			fileStore.insert(file, rs, () => Users.setAvatarData('rocket.cat', 'local', null));
-		});
-	}
+	// 	Meteor.runAsUser('rocket.cat', () => {
+	// 		fileStore.insert(file, rs, () => Users.setAvatarData('rocket.cat', 'local', null));
+	// 	});
+	// }
 
 	if (process.env.ADMIN_PASS) {
 		if ((await (await getUsersInRole('admin')).count()) === 0) {
@@ -187,11 +187,11 @@ Meteor.startup(async function () {
 		console.log(`Password: ${adminUser._id}`.green);
 
 		if (Users.findOneByEmailAddress(adminUser.emails[0].address)) {
-			throw new Meteor.Error(`Email ${adminUser.emails[0].address} already exists`, "Rocket.Chat can't run in test mode");
+			throw new Meteor.Error(`Email ${adminUser.emails[0].address} already exists`, "Magic.Chat can't run in test mode");
 		}
 
 		if (!checkUsernameAvailability(adminUser.username)) {
-			throw new Meteor.Error(`Username ${adminUser.username} already exists`, "Rocket.Chat can't run in test mode");
+			throw new Meteor.Error(`Username ${adminUser.username} already exists`, "Magic.Chat can't run in test mode");
 		}
 
 		Users.create(adminUser);
