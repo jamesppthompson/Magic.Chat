@@ -143,5 +143,5 @@ registerAdminRoute('/chatpal', {
 
 registerAdminRoute('/upgrade/:type?', {
 	name: 'upgrade',
-	component: lazy(() => import('./upgrade/UpgradePage')),
+	component: lazy(() => import('./info/InformationRoute')),
 });

@@ -41,9 +41,9 @@ const InformationPage = memo(function InformationPage({
 			<Page.Header title={t('Info')}>
 				{canViewStatistics && (
 					<ButtonGroup>
-						<Button type='button' onClick={onClickDownloadInfo}>
+						{/* <Button type='button' onClick={onClickDownloadInfo}>
 							<Icon name='download' /> {t('Download_Info')}
-						</Button>
+						</Button> */}
 						<Button primary type='button' onClick={onClickRefreshButton}>
 							<Icon name='reload' /> {t('Refresh')}
 						</Button>
@@ -79,21 +79,21 @@ const InformationPage = memo(function InformationPage({
 					)}
 
 					<Grid>
-						<Grid.Item xl={3}>
+						<Grid.Item xl={6}>
 							<DeploymentCard info={info} statistics={statistics} instances={instances} />
 						</Grid.Item>
-						<Grid.Item xl={3}>
+						{/* <Grid.Item xl={3}>
 							<LicenseCard />
-						</Grid.Item>
+						</Grid.Item> */}
 						<Grid.Item xl={6} md={8} xs={4} sm={8}>
 							<UsageCard vertical={false} statistics={statistics} />
 						</Grid.Item>
-						<Grid.Item xl={6}>
+						{/* <Grid.Item xl={6}>
 							<FederationCard />
 						</Grid.Item>
 						<Grid.Item xl={3}>
 							<SeatsCard />
-						</Grid.Item>
+						</Grid.Item> */}
 					</Grid>
 				</Box>
 			</Page.ScrollableContentWithShadow>

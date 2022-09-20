@@ -29,13 +29,13 @@ const initialValues = {
 	senderInfo: '',
 	department: '',
 	// SMTP
-	smtpServer: '',
+	smtpServer: 'smtp.gmail.com',
 	smtpPort: 587,
 	smtpUsername: '',
 	smtpPassword: '',
 	smtpSecure: false,
 	// IMAP
-	imapServer: '',
+	imapServer: 'imap.gmail.com',
 	imapPort: 993,
 	imapUsername: '',
 	imapPassword: '',

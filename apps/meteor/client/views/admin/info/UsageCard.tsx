@@ -92,7 +92,7 @@ const UsageCard = ({ statistics, vertical }: UsageCardProps): ReactElement => {
 						<TextSeparator label={t('Stats_Active_Users')} value={statistics.activeUsers} />
 						<TextSeparator label={t('Stats_Active_Guests')} value={statistics.activeGuests} />
 						<TextSeparator label={t('Stats_Non_Active_Users')} value={statistics.nonActiveUsers} />
-						<TextSeparator label={t('Stats_App_Users')} value={statistics.appUsers} />
+						{/* <TextSeparator label={t('Stats_App_Users')} value={statistics.appUsers} /> */}
 					</Card.Col.Section>
 					<Card.Col.Section>
 						<Card.Col.Title>{t('Uploads')}</Card.Col.Title>

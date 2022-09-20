@@ -32,20 +32,20 @@ const DeploymentCard = ({ info, statistics, instances }: DeploymentCardProps): R
 			<Card.Title>{t('Deployment')}</Card.Title>
 			<Card.Body>
 				<Card.Col>
-					<Card.Col.Section>
+					{/* <Card.Col.Section>
 						<Card.Col.Title>{t('Version')}</Card.Col.Title>
 						{statistics.version}
-					</Card.Col.Section>
-					<Card.Col.Section>
+					</Card.Col.Section> */}
+					{/* <Card.Col.Section>
 						<Card.Col.Title>{t('Deployment_ID')}</Card.Col.Title>
 						{statistics.uniqueId}
-					</Card.Col.Section>
-					{appsEngineVersion && (
+					</Card.Col.Section> */}
+					{/* {appsEngineVersion && (
 						<Card.Col.Section>
 							<Card.Col.Title>{t('Apps_Engine_Version')}</Card.Col.Title>
 							{appsEngineVersion}
 						</Card.Col.Section>
-					)}
+					)} */}
 					<Card.Col.Section>
 						<Card.Col.Title>{t('Node_version')}</Card.Col.Title>
 						{statistics.process.nodeVersion}
@@ -72,7 +72,7 @@ const DeploymentCard = ({ info, statistics, instances }: DeploymentCardProps): R
 				</Card.Col>
 			</Card.Body>
 
-			{!!instances.length && (
+			{/* {!!instances.length && (
 				<Card.Footer>
 					<ButtonGroup align='end'>
 						<Button small onClick={handleInstancesModal}>
@@ -80,7 +80,7 @@ const DeploymentCard = ({ info, statistics, instances }: DeploymentCardProps): R
 						</Button>
 					</ButtonGroup>
 				</Card.Footer>
-			)}
+			)} */}
 		</Card>
 	);
 };
