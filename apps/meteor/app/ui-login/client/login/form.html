@@ -92,84 +92,33 @@
       </div>
       <!--/*additional properties start 	=marked by angel=*/-->
       <div class="rc-input">
-        <label class="rc-input__label" for="newState">
-          <div class="rc-input__wrapper">
-            <input
-              name="newState"
-              id="newState"
-              type="text"
-              class="rc-input__element"
-              autocapitalize="off"
-              autocorrect="off"
-              placeholder="Input city state zip"
-              autofocus
-            />
-            <div class="input-error"></div>
-          </div>
-        </label>
-      </div>
-      <div class="rc-input">
-        <label class="rc-input__label" for="newStreet">
-          <div class="rc-input__wrapper">
-            <input
-              name="newStreet"
-              id="newStreet"
-              type="text"
-              class="rc-input__element"
-              autocapitalize="off"
-              autocorrect="off"
-              placeholder="Input street address"
-              autofocus
-            />
-            <div class="input-error"></div>
-          </div>
-        </label>
-      </div>
-      <div class="rc-input">
-        <label class="rc-input__label" for="newPhone">
-          <div class="rc-input__wrapper">
-            <input
-              name="newPhone"
-              id="newPhone"
-              type="text"
-              class="rc-input__element"
-              autocapitalize="off"
-              autocorrect="off"
-              placeholder="Input phone number"
-              autofocus
-            />
-            <div class="input-error"></div>
-          </div>
-        </label>
-      </div>
-      <div class="rc-input">
         <label class="rc-input__label">Select gender</label>
-        <label class="rc-input__label" for="newGender">
+        <label class="rc-input__label" for="gender">
           <div class="rc-input__wrapper">
             <select
-              name="newGender"
-              id="newGender"
+              name="gender"
+              id="gender"
               class="rc-input__element"
               autofocus
             >
-              <option value="Man">Man</option>
-              <option value="Woman">Woman</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
             </select>
             <div class="input-error"></div>
           </div>
         </label>
       </div>
       <div class="rc-input">
-        <label class="rc-input__label" for="newLeadType">
+        <label class="rc-input__label" for="state">
           <div class="rc-input__wrapper">
             <input
-              name="newLeadType"
-              id="newLeadType"
+              name="state"
+              id="state"
               type="text"
               class="rc-input__element"
               autocapitalize="off"
               autocorrect="off"
-              placeholder="Input Lead type medicare"
+              placeholder="City state zip"
               autofocus
             />
             <div class="input-error"></div>
@@ -177,16 +126,16 @@
         </label>
       </div>
       <div class="rc-input">
-        <label class="rc-input__label" for="newLifeInsurance">
+        <label class="rc-input__label" for="street">
           <div class="rc-input__wrapper">
             <input
-              name="newLifeInsurance"
-              id="newLifeInsurance"
+              name="street"
+              id="street"
               type="text"
               class="rc-input__element"
               autocapitalize="off"
               autocorrect="off"
-              placeholder="Input life insurance"
+              placeholder="Street address"
               autofocus
             />
             <div class="input-error"></div>
@@ -194,16 +143,16 @@
         </label>
       </div>
       <div class="rc-input">
-        <label class="rc-input__label" for="newSupplement">
+        <label class="rc-input__label" for="phone">
           <div class="rc-input__wrapper">
             <input
-              name="newSupplement"
-              id="newSupplement"
+              name="phone"
+              id="phone"
               type="text"
               class="rc-input__element"
               autocapitalize="off"
               autocorrect="off"
-              placeholder="Input medicare supplement"
+              placeholder="Phone number"
               autofocus
             />
             <div class="input-error"></div>
@@ -211,29 +160,12 @@
         </label>
       </div>
       <div class="rc-input">
-        <label class="rc-input__label" for="newMIBIdentifier">
+        <label class="rc-input__label">Date of Birth</label>
+        <label class="rc-input__label" for="birth">
           <div class="rc-input__wrapper">
             <input
-              name="newMIBIdentifier"
-              id="newMIBIdentifier"
-              type="text"
-              class="rc-input__element"
-              autocapitalize="off"
-              autocorrect="off"
-              placeholder="Input MIB Medicare beneficiary identifier"
-              autofocus
-            />
-            <div class="input-error"></div>
-          </div>
-        </label>
-      </div>
-      <div class="rc-input">
-        <label class="rc-input__label">Plan A enrollment date </label>
-        <label class="rc-input__label" for="newAEnrollmentDate">
-          <div class="rc-input__wrapper">
-            <input
-              name="newAEnrollmentDate"
-              id="newAEnrollmentDate"
+              name="birth"
+              id="birth"
               type="date"
               class="rc-input__element"
               autofocus
@@ -243,12 +175,80 @@
         </label>
       </div>
       <div class="rc-input">
-        <label class="rc-input__label">Plan B enrollment date </label>
-        <label class="rc-input__label" for="newBEnrollmentDate">
+        <label class="rc-input__label" for="areaCode">
           <div class="rc-input__wrapper">
             <input
-              name="newBEnrollmentDate"
-              id="newBEnrollmentDate"
+              name="areaCode"
+              id="areaCode"
+              type="text"
+              class="rc-input__element"
+              autocapitalize="off"
+              autocorrect="off"
+              placeholder="Area Code"
+              autofocus
+            />
+            <div class="input-error"></div>
+          </div>
+        </label>
+      </div>
+      <div class="rc-input">
+        <label class="rc-input__label" for="socialSecurity">
+          <div class="rc-input__wrapper">
+            <input
+              name="socialSecurity"
+              id="socialSecurity"
+              type="text"
+              class="rc-input__element"
+              autocapitalize="off"
+              autocorrect="off"
+              placeholder="Social Security"
+              autofocus
+            />
+            <div class="input-error"></div>
+          </div>
+        </label>
+      </div>
+      <div class="rc-input">
+        <label class="rc-input__label">Medicare # </label>
+        <label class="rc-input__label" for="medicare">
+          <div class="rc-input__wrapper">
+            <select
+              name="medicare"
+              id="medicare"
+              class="rc-input__element"
+              autofocus
+            >
+              <option value="True">True</option>
+              <option value="False">False</option>
+            </select>
+            <div class="input-error"></div>
+          </div>
+        </label>
+      </div>
+      <div class="rc-input">
+        <label class="rc-input__label" for="MIB">
+          <div class="rc-input__wrapper">
+            <input
+              name="MIB"
+              id="MIB"
+              type="text"
+              class="rc-input__element"
+              autocapitalize="off"
+              autocorrect="off"
+              placeholder="MIB"
+              autofocus
+            />
+            <div class="input-error"></div>
+          </div>
+        </label>
+      </div>
+      <div class="rc-input">
+        <label class="rc-input__label">Medicare Part A start date </label>
+        <label class="rc-input__label" for="MPartADate">
+          <div class="rc-input__wrapper">
+            <input
+              name="MPartADate"
+              id="MPartADate"
               type="date"
               class="rc-input__element"
               autofocus
@@ -258,73 +258,21 @@
         </label>
       </div>
       <div class="rc-input">
-        <label class="rc-input__label">LIS </label>
-        <label class="rc-input__label" for="newLIS">
-          <div class="rc-input__wrapper">
-            <select
-              name="newLIS"
-              id="newLIS"
-              class="rc-input__element"
-              autofocus
-            >
-              <option value="Yes">Yes</option>
-              <option value="No">No</option>
-            </select>
-            <div class="input-error"></div>
-          </div>
-        </label>
-      </div>
-      <div class="rc-input">
-        <label class="rc-input__label" for="newLeadVendor">
+        <label class="rc-input__label">Medicare Part B start date</label>
+        <label class="rc-input__label" for="MPartBDate">
           <div class="rc-input__wrapper">
             <input
-              name="newLeadVendor"
-              id="newLeadVendor"
-              type="text"
+              name="MPartBDate"
+              id="MPartBDate"
+              type="date"
               class="rc-input__element"
-              autocapitalize="off"
-              autocorrect="off"
-              placeholder="Input lead vendor"
               autofocus
             />
             <div class="input-error"></div>
           </div>
         </label>
       </div>
-      <div class="rc-input">
-        <label class="rc-input__label" for="newMedicareAdvantagePlan">
-          <div class="rc-input__wrapper">
-            <input
-              name="newMedicareAdvantagePlan"
-              id="newMedicareAdvantagePlan"
-              type="text"
-              class="rc-input__element"
-              autocapitalize="off"
-              autocorrect="off"
-              placeholder="Input existing Medicare advantage plan"
-              autofocus
-            />
-            <div class="input-error"></div>
-          </div>
-        </label>
-      </div>
-      <div class="rc-input">
-        <label class="rc-input__label" for="newPreviousMedicarePlan">
-          <div class="rc-input__wrapper">
-            <input
-              name="newPreviousMedicarePlan"
-              id="newPreviousMedicarePlan"
-              type="text"
-              class="rc-input__element"
-              autocapitalize="off"
-              autocorrect="off"
-              placeholder="Input previous Medicare plan"
-              autofocus
-            />
-            <div class="input-error"></div>
-          </div>
-        </label>
-      </div>
+      
       <!--/*additional properties end 	=marked by angel=*/-->
       <div class="rc-input">
         <label class="rc-input__label" for="pass">

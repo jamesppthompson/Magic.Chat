@@ -442,8 +442,8 @@ const AccountProfileForm = ({
                         onInput={handleProperties}
                         className={"rc-input__element"}
                       >
-                        <option value="Man">Man</option>
-                        <option value="Woman">Woman</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
                       </select>
                     </Field.Row>
                   </Field>
@@ -466,119 +466,11 @@ const AccountProfileForm = ({
               {useMemo(
                 () => (
                   <Field>
-                    <Field.Label>{"lead type medicare"}</Field.Label>
-                    <Field.Row>
-                      <TextInput
-                        name="lead"
-                        flexGrow={1}
-                        value={objBio.lead}
-                        onChange={handleProperties}
-                      />
-                    </Field.Row>
-                  </Field>
-                ),
-                [bio, handleBio, bioError, t]
-              )}
-            </FieldGroup>
-          </Grid.Item>
-          <Grid.Item>
-            <FieldGroup
-              display="flex"
-              flexDirection="column"
-              flexGrow={1}
-              flexShrink={0}
-            >
-              {useMemo(
-                () => (
-                  <Field>
-                    <Field.Label>{"life insurance"}</Field.Label>
-                    <Field.Row>
-                      <TextInput
-                        name="lifeInsurance"
-                        flexGrow={1}
-                        value={objBio.lifeInsurance}
-                        onChange={handleProperties}
-                      />
-                    </Field.Row>
-                  </Field>
-                ),
-                [bio, handleBio, bioError, t]
-              )}
-            </FieldGroup>
-          </Grid.Item>
-        </Grid>
-      </Field>{" "}
-      <Field>
-        <Grid>
-          <Grid.Item>
-            <FieldGroup
-              display="flex"
-              flexDirection="column"
-              flexGrow={1}
-              flexShrink={0}
-            >
-              {useMemo(
-                () => (
-                  <Field>
-                    <Field.Label>{"medicare supplement"}</Field.Label>
-                    <Field.Row>
-                      <TextInput
-                        name="supplement"
-                        flexGrow={1}
-                        value={objBio.supplement}
-                        onChange={handleProperties}
-                      />
-                    </Field.Row>
-                  </Field>
-                ),
-                [bio, handleBio, bioError, t]
-              )}
-            </FieldGroup>
-          </Grid.Item>
-          <Grid.Item>
-            <FieldGroup
-              display="flex"
-              flexDirection="column"
-              flexGrow={1}
-              flexShrink={0}
-            >
-              {useMemo(
-                () => (
-                  <Field>
-                    <Field.Label>{"MIB Medicare beneficiary"}</Field.Label>
-                    <Field.Row>
-                      <TextInput
-                        name="MIBIdentifier"
-                        flexGrow={1}
-                        value={objBio.MIBIdentifier}
-                        onChange={handleProperties}
-                      />
-                    </Field.Row>
-                  </Field>
-                ),
-                [bio, handleBio, bioError, t]
-              )}
-            </FieldGroup>
-          </Grid.Item>
-        </Grid>
-      </Field>{" "}
-      <Field>
-        <Grid>
-          <Grid.Item>
-            <FieldGroup
-              display="flex"
-              flexDirection="column"
-              flexGrow={1}
-              flexShrink={0}
-            >
-              {useMemo(
-                () => (
-                  <Field>
-                    <Field.Label>{"Plan A enrollment date"}</Field.Label>
+                    <Field.Label>{"Date of Birth"}</Field.Label>
                     <Field.Row>
                       <input
-                        name="AEnrollmentDate"
-                        value={objBio.AEnrollmentDate}
+                        name="birth"
+                        value={objBio.birth}
                         type="date"
                         onInput={handleProperties}
                         className={"rc-input__element"}
@@ -600,14 +492,13 @@ const AccountProfileForm = ({
               {useMemo(
                 () => (
                   <Field>
-                    <Field.Label>{"Plan B enrollment date"}</Field.Label>
+                    <Field.Label>{"Area Code"}</Field.Label>
                     <Field.Row>
-                      <input
-                        name="BEnrollmentDate"
-                        value={objBio.BEnrollmentDate}
-                        type="date"
-                        onInput={handleProperties}
-                        className={"rc-input__element"}
+                      <TextInput
+                        name="areaCode"
+                        flexGrow={1}
+                        value={objBio.areaCode}
+                        onChange={handleProperties}
                       />
                     </Field.Row>
                   </Field>
@@ -630,16 +521,45 @@ const AccountProfileForm = ({
               {useMemo(
                 () => (
                   <Field>
-                    <Field.Label>{"LIS"}</Field.Label>
+                    <Field.Label>{"Social Security"}</Field.Label>
+                    <Field.Row>
+                      <TextInput
+                        name="socialSecurity"
+                        flexGrow={1}
+                        value={objBio.socialSecurity}
+                        onChange={handleProperties}
+                      />
+                    </Field.Row>
+                  </Field>
+                ),
+                [bio, handleBio, bioError, t]
+              )}
+            </FieldGroup>
+          </Grid.Item>
+        </Grid>
+      </Field>{" "}
+      <Field>
+        <Grid>
+          <Grid.Item>
+            <FieldGroup
+              display="flex"
+              flexDirection="column"
+              flexGrow={1}
+              flexShrink={0}
+            >
+              {useMemo(
+                () => (
+                  <Field>
+                    <Field.Label>{"Medicare #"}</Field.Label>
                     <Field.Row>
                       <select
-                        name="LIS"
-                        value={objBio.LIS}
+                        name="Medicare"
+                        value={objBio.Medicare}
                         onInput={handleProperties}
                         className={"rc-input__element"}
                       >
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
+                        <option value="True">True</option>
+                        <option value="False">False</option>
                       </select>
                     </Field.Row>
                   </Field>
@@ -658,12 +578,12 @@ const AccountProfileForm = ({
               {useMemo(
                 () => (
                   <Field>
-                    <Field.Label>{"Input lead vendor"}</Field.Label>
+                    <Field.Label>{"MIB"}</Field.Label>
                     <Field.Row>
                       <TextInput
-                        name="leadVendor"
+                        name="MIB"
                         flexGrow={1}
-                        value={objBio.leadVendor}
+                        value={objBio.MIB}
                         onChange={handleProperties}
                       />
                     </Field.Row>
@@ -687,15 +607,14 @@ const AccountProfileForm = ({
               {useMemo(
                 () => (
                   <Field>
-                    <Field.Label>
-                      {"Input existing Medicare advantage plan"}
-                    </Field.Label>
+                    <Field.Label>{"Medicare Part A start date"}</Field.Label>
                     <Field.Row>
-                      <TextInput
-                        name="MedicareAdvantagePlan"
-                        flexGrow={1}
-                        value={objBio.MedicareAdvantagePlan}
-                        onChange={handleProperties}
+                      <input
+                        name="MPartADate"
+                        value={objBio.MPartADate}
+                        type="date"
+                        onInput={handleProperties}
+                        className={"rc-input__element"}
                       />
                     </Field.Row>
                   </Field>
@@ -714,13 +633,14 @@ const AccountProfileForm = ({
               {useMemo(
                 () => (
                   <Field>
-                    <Field.Label>{"Input previous Medicare plan"}</Field.Label>
+                    <Field.Label>{"Medicare Part B start date"}</Field.Label>
                     <Field.Row>
-                      <TextInput
-                        name="previousMedicarePlan"
-                        flexGrow={1}
-                        value={objBio.previousMedicarePlan}
-                        onChange={handleProperties}
+                      <input
+                        name="MPartBDate"
+                        value={objBio.MPartBDate}
+                        type="date"
+                        onInput={handleProperties}
+                        className={"rc-input__element"}
                       />
                     </Field.Row>
                   </Field>
@@ -731,6 +651,8 @@ const AccountProfileForm = ({
           </Grid.Item>
         </Grid>
       </Field>{" "}
+      
+      
       {/*additional properties end 	=marked by angel=*/}
       <Field>
         <Grid>

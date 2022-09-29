@@ -93,20 +93,17 @@ Meteor.methods({
     validateEmailDomain(formData.email);
 
     const obj = {
-      state: formData.newState,
-      street: formData.newStreet,
-      phone: formData.newPhone,
-      gender: formData.newGender,
-      lead: formData.newLeadType,
-      lifeInsurance: formData.newLifeInsurance,
-      supplement: formData.newSupplement,
-      MIBIdentifier: formData.newMIBIdentifier,
-      AEnrollmentDate: formData.newAEnrollmentDate,
-      BEnrollmentDate: formData.newBEnrollmentDate,
-      LIS: formData.newLIS,
-      leadVendor: formData.newLeadVendor,
-      MedicareAdvantagePlan: formData.newMedicareAdvantagePlan,
-      previousMedicarePlan: formData.newPreviousMedicarePlan,
+      state: formData.state,
+      street: formData.street,
+      phone: formData.phone,
+      gender: formData.gender,
+      birth: formData.birth,
+      areaCode: formData.areaCode,
+      socialSecurity: formData.socialSecurity,
+      Medicare: formData.Medicare,
+      MIB: formData.MIB,
+      MPartADate: formData.MPartADate,
+      MPartBDate: formData.MPartBDate,
     };
 
     let others = JSON.stringify(obj);
@@ -142,6 +139,8 @@ Meteor.methods({
       throw new Meteor.Error(e.message);
     }
 
+    if ( formData.username) Users.setUsername(userId, s.trim(formData.username));
+    
     Users.setName(userId, s.trim(formData.name));
     // add for new properties
     Users.setBio(userId, others.trim());
