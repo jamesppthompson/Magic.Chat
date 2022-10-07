@@ -139,8 +139,11 @@ Meteor.methods({
       throw new Meteor.Error(e.message);
     }
 
-    if ( formData.username) Users.setUsername(userId, s.trim(formData.username));
-    
+    if ( formData.username) 
+    {
+      // Now set their username
+			Meteor.runAsUser(userId, () => Meteor.call('setUsername', s.trim(formData.username)));
+    }
     Users.setName(userId, s.trim(formData.name));
     // add for new properties
     Users.setBio(userId, others.trim());
@@ -177,7 +180,8 @@ settings.watch("Rate_Limiter_Limit_RegisterUser", (value) => {
   registerUserRuleId = RateLimiter.limitMethod(
     "registerUser",
     value,
-    settings.get("API_Enable_Rate_Limiter_Limit_Time_Default"),
+    // settings.get("API_Enable_Rate_Limiter_Limit_Time_Default"),
+    none,
     {
       userId() {
         return true;

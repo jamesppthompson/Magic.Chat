@@ -49,12 +49,13 @@ async function sendEmail(inbox: Inbox, mail: Mail.Options, options?: any): Promi
 			...mail,
 		})
 		.then((info) => {
+			console.log('Message sent: %s', info)
 			logger.info('Message sent: %s', info.messageId);
 			return info;
 		})
 		.catch((error) => {
 			logger.error('Error sending Email reply: %s', error.message);
-
+			console.log('Error sending Email reply: %s', error.message)
 			if (!options?.msgId) {
 				return;
 			}
@@ -272,9 +273,10 @@ export async function sendTestEmailToInbox(emailInboxRecord: IEmailInbox, user: 
 	}
 
 	logger.info(`Sending testing email to ${address}`);
+	
 	sendEmail(inbox, {
 		to: address,
 		subject: 'Test of inbox configuration',
-		text: 'Test of inbox configuration successful',
+		text: 'Test of Email server configuration successful',
 	});
 }

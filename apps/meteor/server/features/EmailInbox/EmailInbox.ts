@@ -62,7 +62,8 @@ export async function configureEmailInboxes(): Promise<void> {
 				if (!email.messageId) {
 					return;
 				}
-
+				console.log("<<<< email receive >>>>\n\n");
+				console.log(email,"\n", "<<<<<<<<< emailInboxRecord >?>>>>>>>>>>>>>\n", emailInboxRecord,"\n");
 				try {
 					await EmailMessageHistory.create({ _id: email.messageId, email: emailInboxRecord.email });
 					onEmailReceived(email, emailInboxRecord.email, emailInboxRecord.department);
