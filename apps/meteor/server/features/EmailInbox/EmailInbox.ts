@@ -17,6 +17,8 @@ export type Inbox = {
 
 export const inboxes = new Map<string, Inbox>();
 
+
+
 export async function configureEmailInboxes(): Promise<void> {
 	const emailInboxesCursor = EmailInbox.find({
 		active: true,
@@ -62,8 +64,6 @@ export async function configureEmailInboxes(): Promise<void> {
 				if (!email.messageId) {
 					return;
 				}
-				console.log("<<<< email receive >>>>\n\n");
-				console.log(email,"\n", "<<<<<<<<< emailInboxRecord >?>>>>>>>>>>>>>\n", emailInboxRecord,"\n");
 				try {
 					await EmailMessageHistory.create({ _id: email.messageId, email: emailInboxRecord.email });
 					onEmailReceived(email, emailInboxRecord.email, emailInboxRecord.department);

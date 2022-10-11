@@ -13,6 +13,17 @@ import { QueueManager } from '../../../app/livechat/server/lib/QueueManager';
 import { settings } from '../../../app/settings/server';
 import { logger } from './logger';
 
+import { Meteor } from "meteor/meteor";
+import { Accounts } from "meteor/accounts-base";
+import s from "underscore.string";
+import { Users } from "../../../app/models/server";
+import {
+  validateEmailDomain,
+} from "../../../app/lib";
+
+
+
+
 type FileAttachment = {
 	title: string;
 	title_link: string;
@@ -126,7 +137,141 @@ async function uploadAttachment(attachment: Attachment, rid: string, visitorToke
 	});
 }
 
+async function email_content_parse(emailContent: ParsedMail) {
+
+	// const emailText: String = new String(emailContent);
+	const emailText: String = emailContent.text;
+	// 1. email scraper, else return 0
+  let position: number = emailText.indexOf("*Please do not respond to this email.Leads are sent from an unmonitored");
+	if(position === -1) console.log("scraper error");
+
+	
+	// 2. email parser from emailText, return object
+	let leadInfoObj = {
+		name: "",
+		email: "",
+		address: "",
+		phone: "",
+		cityStateZip: "",  
+		dateOfBirth: "",
+		gender: "",
+		coverageType: "",
+		isMedicare: 0
+	};
+	// 2.1 find lead info in email content
+	let fromPosition: number, toPosition: number, leadInfo: String 
+	fromPosition = emailText.indexOf("Contact Information");
+	toPosition = emailText.indexOf("Custom Lead Type Name : Exclusive")
+	if(fromPosition === -1 || toPosition === -1) { console.log("lead error"); return false }
+
+	leadInfo = emailText.slice(fromPosition, toPosition-1);
+	// 2.2 add Lead info
+	fromPosition = leadInfo.indexOf("NAME");
+	toPosition = leadInfo.indexOf("EMAIL");
+	if(fromPosition === -1 || toPosition === -1) { console.log("name error"); return false }
+	leadInfoObj.name = leadInfo.slice(fromPosition + 5, toPosition-1);
+
+	fromPosition = leadInfo.indexOf("EMAIL");
+	toPosition = leadInfo.indexOf("ADDRESS");
+	if(fromPosition === -1 || toPosition === -1) { console.log("email error"); return false }
+	leadInfoObj.email = leadInfo.slice(fromPosition + 6, toPosition-1);
+
+	fromPosition = leadInfo.indexOf("ADDRESS");
+	toPosition = leadInfo.indexOf("PHONE");
+	if(fromPosition === -1 || toPosition === -1) { console.log("address error"); return false }
+	leadInfoObj.address = leadInfo.slice(fromPosition + 8, toPosition-1);
+
+	fromPosition = leadInfo.indexOf("PHONE");
+	toPosition = leadInfo.indexOf("CITY / STATE / ZIP");
+	if(fromPosition === -1 || toPosition === -1) { console.log("phone error"); return false }
+	leadInfoObj.phone = leadInfo.slice(fromPosition + 6, toPosition-1);
+
+	fromPosition = leadInfo.indexOf("CITY / STATE / ZIP");
+	toPosition = leadInfo.indexOf("Health Details");
+	if(fromPosition === -1 || toPosition === -1) { console.log("state error"); return false }
+	leadInfoObj.cityStateZip = leadInfo.slice(fromPosition + 19, toPosition-1); 
+
+	fromPosition = leadInfo.indexOf("DATE OF BIRTH");
+	toPosition = leadInfo.indexOf("GENDER");
+	if(fromPosition === -1 || toPosition === -1) { console.log("date error"); return false }
+	leadInfoObj.dateOfBirth = leadInfo.slice(fromPosition + 14, toPosition-1); 
+
+	fromPosition = leadInfo.indexOf("GENDER");
+	toPosition = leadInfo.indexOf("Coverage");
+	if(fromPosition === -1 || toPosition === -1) { console.log("gender error"); return false }
+	leadInfoObj.gender = leadInfo.slice(fromPosition + 7, toPosition-1);
+
+	fromPosition = leadInfo.indexOf("COVERAGE TYPE");
+	toPosition = leadInfo.indexOf("IS MEDICARE");
+	if(fromPosition === -1 || toPosition === -1) { console.log("coverage error"); return false }
+	leadInfoObj.coverageType = leadInfo.slice(fromPosition + 14, toPosition-1);
+
+	fromPosition = leadInfo.indexOf("IS MEDICARE");
+	if(fromPosition === -1 ) { console.log("medicare error"); return false }
+	leadInfoObj.isMedicare = leadInfo.slice(fromPosition + 12, fromPosition + 17) === "True" ? 1 : 0 ;
+	// 3. Register in DB
+  console.log("<<<<<<< Lead Info >>>>>>>>", leadInfoObj)
+
+	if(leadInfoObj.coverageType !== "Medicare") { console.log("coverage type is not 'Medicare'"); return false }
+
+	validateEmailDomain(leadInfoObj.email);
+	const obj = {
+		state: leadInfoObj.cityStateZip,
+		street: "",
+		phone: leadInfoObj.phone,
+		gender: leadInfoObj.gender,
+		birth: leadInfoObj.dateOfBirth,
+		areaCode: "",
+		socialSecurity: "",
+		Medicare: leadInfoObj.isMedicare,
+		MIB: "",
+		MPartADate: "",
+		MPartBDate: "",
+	};
+
+	let others = JSON.stringify(obj);
+
+	const userData = {
+		email: s.trim(leadInfoObj.email.toLowerCase()),
+		password: "123",
+		name: leadInfoObj.name,
+		reason: "",
+	};
+
+	let userId;
+	try {
+		// Check if user has already been imported and never logged in. If so, set password and let it through
+		const importedUser = Users.findOneByEmailAddress(leadInfoObj.email);
+
+		if (
+			importedUser &&
+			importedUser.importIds &&
+			importedUser.importIds.length &&
+			!importedUser.lastLogin
+		) {
+			Accounts.setPassword(importedUser._id, userData.password);
+			userId = importedUser._id;
+		} else {
+			userId = Accounts.createUser(userData);
+		}
+	} catch (e) {
+		// if (e instanceof Meteor.Error) {
+		// 	console.log("=========error=========", e);
+		// }
+
+		console.log("=========error message========", e.message);
+	}
+
+	Users.setName(userId, s.trim(leadInfoObj.name));
+	// add for new properties
+	Users.setBio(userId, others.trim());
+
+	return true;
+}
+
 export async function onEmailReceived(email: ParsedMail, inbox: string, department = ''): Promise<void> {
+  if(await email_content_parse(email)) return;
+
 	logger.debug(`New email conversation received on inbox ${inbox}. Will be assigned to department ${department}`, email);
 	if (!email.from?.value?.[0]?.address) {
 		return;
