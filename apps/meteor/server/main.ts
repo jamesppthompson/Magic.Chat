@@ -49,6 +49,10 @@ import './methods/openRoom';
 import './methods/readMessages';
 import './methods/readThreads';
 import './methods/registerUser';
+// new method
+import './methods/registerClient';
+import './methods/registerLead';
+//
 import './methods/removeRoomLeader';
 import './methods/removeRoomModerator';
 import './methods/removeRoomOwner';

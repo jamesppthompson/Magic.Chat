@@ -142,6 +142,8 @@ async function email_content_parse(emailContent: ParsedMail) {
 	// const emailText: String = new String(emailContent);
 	const emailText: String = emailContent.text;
 	// 1. email scraper, else return 0
+	console.log("======== email content =========", emailText);
+	
   let position: number = emailText.indexOf("*Please do not respond to this email.Leads are sent from an unmonitored");
 	if(position === -1) console.log("scraper error");
 

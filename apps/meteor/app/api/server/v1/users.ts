@@ -511,6 +511,29 @@ API.v1.addRoute(
 		},
 	},
 );
+// added by angel start
+API.v1.addRoute(
+	'Lead.register',
+	{
+		authRequired: false,
+	},
+	{
+		post() {
+			if (this.userId) {
+				return API.v1.failure('Logged in users can not register again.');
+			}
+
+			// Register the client
+			const userId = Meteor.call('registerLead', this.bodyParams);
+
+			// Now set their username 
+			const { fields } = this.parseJsonQuery();
+
+			return API.v1.success({ user: Users.findOneById(userId, { fields }) });
+		},
+	},
+);
+// added by angel end
 
 API.v1.addRoute(
 	'users.resetAvatar',
