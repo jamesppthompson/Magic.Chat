@@ -15,36 +15,33 @@ import { usePagination } from '../../../../components/GenericTable/hooks/usePagi
 import { useSort } from '../../../../components/GenericTable/hooks/useSort';
 import { useEndpointData } from '../../../../hooks/useEndpointData';
 import { AsyncStatePhase } from '../../../../lib/asyncState';
-import UsersTableRow from './UsersTableRow';
+import ProspectsTableRow from './ProspectsTableRow';
 
-type UsersTableProps = {
+type ProspectsTableProps = {
 	reload: MutableRefObject<() => void>;
 };
 
-const UsersTable = ({ reload }: UsersTableProps): ReactElement | null => {
+const ProspectsTable = ({ reload }: ProspectsTableProps): ReactElement | null => {
 	const t = useTranslation();
-	const usersRoute = useRoute('admin-users');
+	const prospectsRoute = useRoute('admin-prospects');
 	const mediaQuery = useMediaQuery('(min-width: 1024px)');
 	const [text, setText] = useState('');
 	const { current, itemsPerPage, setItemsPerPage: onSetItemsPerPage, setCurrent: onSetCurrent, ...paginationProps } = usePagination();
-	const { sortBy, sortDirection, setSort } = useSort<'name' | 'username' | 'emails.address' | 'status'>('name');
+	const { sortBy, sortDirection, setSort } = useSort<'name' | 'emails.address' >('name');
 
 	const query = useDebouncedValue(
 		useMemo(
 			() => ({
 				fields: JSON.stringify({
 					name: 1,
-					username: 1,
 					emails: 1,
-					roles: 1,
-					status: 1,
-					avatarETag: 1,
-					active: 1,
+					gender: 1,
+					phone: 1,
+					birth: 1,
 				}),
 				query: JSON.stringify({
 					$or: [
 						{ 'emails.address': { $regex: text || '', $options: 'i' } },
-						{ username: { $regex: text || '', $options: 'i' } },
 						{ name: { $regex: text || '', $options: 'i' } },
 					],
 				}),
@@ -64,7 +61,7 @@ const UsersTable = ({ reload }: UsersTableProps): ReactElement | null => {
 	}, [reload, reloadList]);
 
 	const handleClick = useMutableCallback((id): void =>
-		usersRoute.push({
+		prospectsRoute.push({
 			context: 'info',
 			id,
 		}),
@@ -75,20 +72,8 @@ const UsersTable = ({ reload }: UsersTableProps): ReactElement | null => {
 			<GenericTableHeaderCell w='x200' key='name' direction={sortDirection} active={sortBy === 'name'} onClick={setSort} sort='name'>
 				{t('Name')}
 			</GenericTableHeaderCell>,
-			mediaQuery && (
-				<GenericTableHeaderCell
-					w='x140'
-					key='username'
-					direction={sortDirection}
-					active={sortBy === 'username'}
-					onClick={setSort}
-					sort='username'
-				>
-					{t('Username')}
-				</GenericTableHeaderCell>
-			),
 			<GenericTableHeaderCell
-				w='x120'
+				w='x140'
 				key='email'
 				direction={sortDirection}
 				active={sortBy === 'emails.address'}
@@ -97,13 +82,23 @@ const UsersTable = ({ reload }: UsersTableProps): ReactElement | null => {
 			>
 				{t('Email')}
 			</GenericTableHeaderCell>,
+			<GenericTableHeaderCell
+			w='x100'
+			key='gender'
+			direction={sortDirection}
+			active={sortBy === 'gender'}
+			onClick={setSort}
+			sort='gender'
+		>
+			{'Gender'}
+		</GenericTableHeaderCell>,
 			mediaQuery && (
-				<GenericTableHeaderCell w='x120' key='roles' onClick={setSort}>
-					{t('Roles')}
+				<GenericTableHeaderCell w='x140' key='phone' direction={sortDirection} active={sortBy === 'phone'} onClick={setSort} sort='phone'>
+					{'Phone'}
 				</GenericTableHeaderCell>
 			),
-			<GenericTableHeaderCell w='x100' key='status' direction={sortDirection} active={sortBy === 'status'} onClick={setSort} sort='status'>
-				{t('Status')}
+			<GenericTableHeaderCell w='x100' key='birth' direction={sortDirection} active={sortBy === 'birth'} onClick={setSort} sort='birth'>
+				{'Birthday'}
 			</GenericTableHeaderCell>,
 		],
 		[mediaQuery, setSort, sortBy, sortDirection, t],
@@ -128,7 +123,7 @@ const UsersTable = ({ reload }: UsersTableProps): ReactElement | null => {
 						<GenericTableHeader>{headers}</GenericTableHeader>
 						<GenericTableBody>
 							{value?.users.map((user) => (
-								user.type === "user" && <UsersTableRow key={user._id} onClick={handleClick} mediaQuery={mediaQuery} user={user} />
+								user.type === "client" && <ProspectsTableRow key={user._id} onClick={handleClick} mediaQuery={mediaQuery} user={user} />
 							))}
 						</GenericTableBody>
 					</GenericTable>
@@ -153,4 +148,4 @@ const UsersTable = ({ reload }: UsersTableProps): ReactElement | null => {
 	);
 };
 
-export default UsersTable;
+export default ProspectsTable;

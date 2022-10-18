@@ -21,6 +21,10 @@ const defaultFields = {
 	avatarETag: 1,
 	extension: 1,
 	federated: 1,
+	birth: 1,
+	state: 1,
+	street: 1,
+	gender: 1,
 } as const;
 
 const fullFields = {
@@ -33,6 +37,10 @@ const fullFields = {
 	requirePasswordChange: 1,
 	requirePasswordChangeReason: 1,
 	roles: 1,
+	birth: 1,
+	state: 1,
+	street: 1,
+	gender: 1,
 } as const;
 
 let publicCustomFields: Record<string, 0 | 1> = {};

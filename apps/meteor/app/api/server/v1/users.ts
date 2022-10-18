@@ -414,7 +414,8 @@ API.v1.addRoute(
 						inclusiveFieldsKeys.includes('emails') && 'emails.address.*',
 						inclusiveFieldsKeys.includes('username') && 'username.*',
 						inclusiveFieldsKeys.includes('name') && 'name.*',
-						inclusiveFieldsKeys.includes('type') && 'type.*',
+						inclusiveFieldsKeys.includes('type') && 'type.*' ,
+						
 					].filter(Boolean) as string[],
 					this.queryOperations,
 				)
@@ -512,6 +513,146 @@ API.v1.addRoute(
 	},
 );
 // added by angel start
+// API.v1.addRoute(
+// 	'Lead.info',
+// 	{ authRequired: true, validateParams: isUsersInfoParamsGetProps },
+// 	{
+// 		async get() {
+// 			const { fields } = this.parseJsonQuery();
+
+// 			const user = await getFullUserDataByIdOrUsername(this.userId, {
+// 				filterId: (this.queryParams as any).userId,
+// 				filterUsername: (this.queryParams as any).username,
+// 			});
+
+// 			if (!user) {
+// 				return API.v1.failure('User not found.');
+// 			}
+// 			const myself = user._id === this.userId;
+// 			if (fields.userRooms === 1 && (myself || hasPermission(this.userId, 'view-other-user-channels'))) {
+// 				return API.v1.success({
+// 					user: {
+// 						...user,
+// 						rooms: Subscriptions.findByUserId(user._id, {
+// 							projection: {
+// 								rid: 1,
+// 								name: 1,
+// 								t: 1,
+// 								roles: 1,
+// 								unread: 1,
+// 								federated: 1,
+// 							},
+// 							sort: {
+// 								t: 1,
+// 								name: 1,
+// 							},
+// 						}).fetch(),
+// 					},
+// 				});
+// 			}
+
+// 			return API.v1.success({
+// 				user,
+// 			});
+// 		},
+// 	},
+// );
+
+// API.v1.addRoute(
+// 	'Lead.list',
+// 	{
+// 		authRequired: true,
+// 		queryOperations: ['$or', '$and'],
+// 	},
+// 	{
+// 		async get() {
+// 			if (!hasPermission(this.userId, 'view-d-room')) {
+// 				return API.v1.unauthorized();
+// 			}
+
+// 			const { offset, count } = this.getPaginationItems();
+// 			const { sort, fields, query } = this.parseJsonQuery();
+
+// 			const nonEmptyQuery = getNonEmptyQuery(query, hasPermission(this.userId, 'view-full-other-user-info'));
+// 			const nonEmptyFields = getNonEmptyFields(fields);
+
+// 			const inclusiveFields = getInclusiveFields(nonEmptyFields);
+
+// 			const inclusiveFieldsKeys = Object.keys(inclusiveFields);
+
+// 			if (
+// 				!isValidQuery(
+// 					nonEmptyQuery,
+// 					[
+// 						...inclusiveFieldsKeys,
+// 						inclusiveFieldsKeys.includes('emails') && 'emails.address.*',
+// 						inclusiveFieldsKeys.includes('name') && 'name.*',
+// 						inclusiveFieldsKeys.includes('type') && 'type.*',
+// 					].filter(Boolean) as string[],
+// 					this.queryOperations,
+// 				)
+// 			) {
+// 				throw new Meteor.Error('error-invalid-query', isValidQuery.errors.join('\n'));
+// 			}
+
+// 			const actualSort = sort?.name ? { nameInsensitive: sort.name, ...sort } : sort || { username: 1 };
+
+// 			const limit =
+// 				count !== 0
+// 					? [
+// 							{
+// 								$limit: count,
+// 							},
+// 					  ]
+// 					: [];
+
+// 			const result = await UsersRaw.col
+// 				.aggregate<{ sortedResults: IUser[]; totalCount: { total: number }[] }>([
+// 					{
+// 						$match: nonEmptyQuery,
+// 					},
+// 					{
+// 						$project: inclusiveFields,
+// 					},
+// 					{
+// 						$addFields: {
+// 							nameInsensitive: {
+// 								$toLower: '$name',
+// 							},
+// 						},
+// 					},
+// 					{
+// 						$facet: {
+// 							sortedResults: [
+// 								{
+// 									$sort: actualSort,
+// 								},
+// 								{
+// 									$skip: offset,
+// 								},
+// 								...limit,
+// 							],
+// 							totalCount: [{ $group: { _id: null, total: { $sum: 1 } } }],
+// 						},
+// 					},
+// 				])
+// 				.toArray();
+
+// 			const {
+// 				sortedResults: users,
+// 				totalCount: [{ total } = { total: 0 }],
+// 			} = result[0];
+
+// 			return API.v1.success({
+// 				users,
+// 				count: users.length,
+// 				offset,
+// 				total,
+// 			});
+// 		},
+// 	},
+// );
+
 API.v1.addRoute(
 	'Lead.register',
 	{

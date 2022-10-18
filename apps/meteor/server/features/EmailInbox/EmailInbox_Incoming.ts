@@ -216,59 +216,43 @@ async function email_content_parse(emailContent: ParsedMail) {
 
 	if(leadInfoObj.coverageType !== "Medicare") { console.log("coverage type is not 'Medicare'"); return false }
 
-	validateEmailDomain(leadInfoObj.email);
-	const obj = {
-		state: leadInfoObj.cityStateZip,
-		street: "",
-		phone: leadInfoObj.phone,
-		gender: leadInfoObj.gender,
-		birth: leadInfoObj.dateOfBirth,
-		areaCode: "",
-		socialSecurity: "",
-		Medicare: leadInfoObj.isMedicare,
-		MIB: "",
-		MPartADate: "",
-		MPartBDate: "",
-	};
+	console.log("<<<<<<< Lead Info >>>>>>>>", leadInfoObj)
+    
+    validateEmailDomain(leadInfoObj.email);
 
-	let others = JSON.stringify(obj);
+    const userData = {
+      emails: [{ address: s.trim(leadInfoObj.email.toLowerCase()), verify: false }],
+      name: leadInfoObj.name,
+      type: "client",
+      roles: ["client"],
+      gender: leadInfoObj.gender,
+      state: leadInfoObj.cityStateZip,
+      street: leadInfoObj.address,
+      phone: leadInfoObj.phone,
+      birth: leadInfoObj.dateOfBirth,
+    };
+  
+    let userId;
+    try {
+      // Check if user has already been imported and never logged in. If so, set password and let it through
+      const importedUser = Users.findOneByEmailAddress(leadInfoObj.email);
+      console.log(importedUser)
+      if (
+        importedUser &&
+        importedUser.importIds &&
+        importedUser.importIds.length &&
+        !importedUser.lastLogin
+      ) {
+        // Accounts.setPassword(importedUser._id, userData.password);
+        userId = importedUser._id;
+      } else {
+        userId = Users.create(userData);
+      }
+    } catch (e) {
+      console.log("=========error message========", e.message);
+    }
 
-	const userData = {
-		email: s.trim(leadInfoObj.email.toLowerCase()),
-		password: "123",
-		name: leadInfoObj.name,
-		reason: "",
-	};
-
-	let userId;
-	try {
-		// Check if user has already been imported and never logged in. If so, set password and let it through
-		const importedUser = Users.findOneByEmailAddress(leadInfoObj.email);
-
-		if (
-			importedUser &&
-			importedUser.importIds &&
-			importedUser.importIds.length &&
-			!importedUser.lastLogin
-		) {
-			Accounts.setPassword(importedUser._id, userData.password);
-			userId = importedUser._id;
-		} else {
-			userId = Accounts.createUser(userData);
-		}
-	} catch (e) {
-		// if (e instanceof Meteor.Error) {
-		// 	console.log("=========error=========", e);
-		// }
-
-		console.log("=========error message========", e.message);
-	}
-
-	Users.setName(userId, s.trim(leadInfoObj.name));
-	// add for new properties
-	Users.setBio(userId, others.trim());
-
-	return true;
+    return userId;
 }
 
 export async function onEmailReceived(email: ParsedMail, inbox: string, department = ''): Promise<void> {

@@ -90,6 +90,11 @@ registerAdminRoute('/users/:context?/:id?', {
 	component: lazy(() => import('./users/UsersRoute')),
 });
 
+registerAdminRoute('/prospects/:context?/:id?', {
+	name: 'admin-prospects',
+	component: lazy(() => import('./prospects/ProspectsRoute')),
+});
+
 registerAdminRoute('/rooms/:context?/:id?', {
 	name: 'admin-rooms',
 	component: lazy(() => import('./rooms/RoomsRoute')),

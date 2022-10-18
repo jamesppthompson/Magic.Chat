@@ -91,7 +91,7 @@ const AccountProfileForm = ({
     nickname,
   } = values as AccountFormValues;
 
-  const objBio = JSON.parse(bio);
+  // const objBio = JSON.parse(bio);
 
   const {
     handleRealname,
@@ -200,11 +200,11 @@ const AccountProfileForm = ({
     emails: [{ verified = false } = { verified: false }],
   } = user as any;
 
-  const handleProperties = (e) => {
-    const tempBio = { ...objBio, [e.target.name]: e.target.value };
-    const newBio = JSON.stringify(tempBio);
-    handleBio(newBio);
-  };
+  // const handleProperties = (e) => {
+  //   const tempBio = { ...objBio, [e.target.name]: e.target.value };
+  //   const newBio = JSON.stringify(tempBio);
+  //   handleBio(newBio);
+  // };
 
   const canSave = !![
     !!passwordError,
@@ -342,8 +342,27 @@ const AccountProfileForm = ({
         ),
         [nickname, handleNickname, t]
       )}
+      {useMemo(
+				() => (
+					<Field>
+						<Field.Label>{t('Bio')}</Field.Label>
+						<Field.Row>
+							<TextAreaInput
+								error={bioError}
+								rows={3}
+								flexGrow={1}
+								value={bio}
+								onChange={handleBio}
+								addon={<Icon name='edit' size='x20' alignSelf='center' />}
+							/>
+						</Field.Row>
+						<Field.Error>{bioError}</Field.Error>
+					</Field>
+				),
+				[bio, handleBio, bioError, t],
+			)}
       {/*additional properties start 	=marked by angel=*/}
-      <Field>
+      {/* <Field>
         <Grid>
           <Grid.Item>
             <FieldGroup
@@ -651,7 +670,7 @@ const AccountProfileForm = ({
           </Grid.Item>
         </Grid>
       </Field>{" "}
-      
+       */}
       
       {/*additional properties end 	=marked by angel=*/}
       <Field>
