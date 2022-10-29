@@ -29,17 +29,17 @@ const initialValues = {
 	senderInfo: '',
 	department: '',
 	// SMTP
-	smtpServer: 'smtp.gmail.com',
-	smtpPort: 587,
+	smtpServer: 'smtp.mail.us-east-1.awsapps.com',
+	smtpPort: 465,
 	smtpUsername: '',
 	smtpPassword: '',
-	smtpSecure: false,
+	smtpSecure: true,
 	// IMAP
-	imapServer: 'imap.gmail.com',
+	imapServer: 'imap.mail.us-east-1.awsapps.com',
 	imapPort: 993,
 	imapUsername: '',
 	imapPassword: '',
-	imapSecure: false,
+	imapSecure: true,
 	imapRetries: 10,
 };
 

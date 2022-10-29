@@ -654,7 +654,7 @@ API.v1.addRoute(
 // );
 
 API.v1.addRoute(
-	'Lead.register',
+	'prospect.register',
 	{
 		authRequired: false,
 	},
@@ -665,7 +665,7 @@ API.v1.addRoute(
 			}
 
 			// Register the client
-			const userId = Meteor.call('registerLead', this.bodyParams);
+			const userId = Meteor.call('registerProspect', this.bodyParams);
 
 			// Now set their username 
 			const { fields } = this.parseJsonQuery();

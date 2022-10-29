@@ -136,123 +136,150 @@ async function uploadAttachment(attachment: Attachment, rid: string, visitorToke
 		});
 	});
 }
-
-async function email_content_parse(emailContent: ParsedMail) {
-
-	// const emailText: String = new String(emailContent);
-	const emailText: String = emailContent.text;
+async function email_parse_from_quotewizard(emailText: String) {
 	// 1. email scraper, else return 0
-	console.log("======== email content =========", emailText);
 	
   let position: number = emailText.indexOf("*Please do not respond to this email.Leads are sent from an unmonitored");
-	if(position === -1) console.log("scraper error");
+	if(position === -1) { console.log("quotewizard: scraper error"); return false; }
 
-	
 	// 2. email parser from emailText, return object
-	let leadInfoObj = {
-		name: "",
-		email: "",
-		address: "",
-		phone: "",
-		cityStateZip: "",  
-		dateOfBirth: "",
-		gender: "",
-		coverageType: "",
-		isMedicare: 0
+	let userData = {
+		name: "", // Name // string
+		emails: {}, // Email // object
+		email: "", // string
+		phone: "", // Phone  // strings
+		prospectType: "",  // Type  // string
+		location: "", // Location  // string
+		street: "" , // Street Address  // string
+
+		gender: "", // Gender // Male or Female
+		birth: "", //Birthday // date - 08/19/1950
+		height: "", // Height  // string
+		weight: "", // Weight  // string
+		tobacco: "", // Tobacco?  // No or Yes string
+		relation: "", // Relation  // string
+
+
+		maritalStatus: "", // Marital Status  // string
+		preexistingConditions: "", // Pre-existing Conditions  // Yes or No string
+		typeOfCondition: "", // Type of Condition  // string
+		peopleInHousehold: "", // People in Household  // digits
+		annualIncome: "", // Annual Income  // string
+
+		selfEmployed: "", // self Employed  // Yes or No string
+		qualifyingLifeEvent: "", // Qualifying Life Event  // Yes or No string
+		expectantParent: "", // Expectant parent   // Yes or No string
+		medications : "", // Medications // string
+		healthOfCondition: "", // Health Conditions  // string
+		deniedCoverage: "", // Denied Coverage in the Past 12 Months?  // Yes or No string
+		treatedByPhysician: "", // Treated By Physician in the Past 12 Months?  // Yes or No string 
+		planTypes: "", // Plan Types  // string
+		optionalCoverage: "", // Optional Coverage  // string
+
+		currentlyInsured: "",  // Currently Insured  // Yes or No string 
+		policyExpires: "",  // Policy Expires  // string
+		coveredFor: "",  // Covered For  // string
+		currentProvider: "",  // Current Provider  // string
+		
+		type: "prospect",  // not show  // string
+		roles: ["prospect"],
 	};
 	// 2.1 find lead info in email content
 	let fromPosition: number, toPosition: number, leadInfo: String 
 	fromPosition = emailText.indexOf("Contact Information");
 	toPosition = emailText.indexOf("Custom Lead Type Name : Exclusive")
-	if(fromPosition === -1 || toPosition === -1) { console.log("lead error"); return false }
+	if(fromPosition === -1 || toPosition === -1) { console.log("quotewizard: lead error"); return false }
 
 	leadInfo = emailText.slice(fromPosition, toPosition-1);
 	// 2.2 add Lead info
 	fromPosition = leadInfo.indexOf("NAME");
 	toPosition = leadInfo.indexOf("EMAIL");
-	if(fromPosition === -1 || toPosition === -1) { console.log("name error"); return false }
-	leadInfoObj.name = leadInfo.slice(fromPosition + 5, toPosition-1);
+	if(fromPosition === -1 || toPosition === -1) { console.log("quotewizard: name error"); return false }
+	userData.name = leadInfo.slice(fromPosition + 5, toPosition-1);
 
 	fromPosition = leadInfo.indexOf("EMAIL");
 	toPosition = leadInfo.indexOf("ADDRESS");
-	if(fromPosition === -1 || toPosition === -1) { console.log("email error"); return false }
-	leadInfoObj.email = leadInfo.slice(fromPosition + 6, toPosition-1);
+	if(fromPosition === -1 || toPosition === -1) { console.log("quotewizard: email error"); return false }
+	userData.emails = [{ address: s.trim((leadInfo.slice(fromPosition + 6, toPosition-1)).toLowerCase()), verify: false }] ;
+  userData.email = s.trim((leadInfo.slice(fromPosition + 6, toPosition-1)).toLowerCase());
 
 	fromPosition = leadInfo.indexOf("ADDRESS");
 	toPosition = leadInfo.indexOf("PHONE");
-	if(fromPosition === -1 || toPosition === -1) { console.log("address error"); return false }
-	leadInfoObj.address = leadInfo.slice(fromPosition + 8, toPosition-1);
+	if(fromPosition === -1 || toPosition === -1) { console.log("quotewizard: address error"); return false }
+	userData.street = leadInfo.slice(fromPosition + 8, toPosition-1);
 
 	fromPosition = leadInfo.indexOf("PHONE");
 	toPosition = leadInfo.indexOf("CITY / STATE / ZIP");
-	if(fromPosition === -1 || toPosition === -1) { console.log("phone error"); return false }
-	leadInfoObj.phone = leadInfo.slice(fromPosition + 6, toPosition-1);
+	if(fromPosition === -1 || toPosition === -1) { console.log("quotewizard: phone error"); return false }
+	userData.phone = leadInfo.slice(fromPosition + 6, toPosition-1);
 
 	fromPosition = leadInfo.indexOf("CITY / STATE / ZIP");
 	toPosition = leadInfo.indexOf("Health Details");
-	if(fromPosition === -1 || toPosition === -1) { console.log("state error"); return false }
-	leadInfoObj.cityStateZip = leadInfo.slice(fromPosition + 19, toPosition-1); 
+	if(fromPosition === -1 || toPosition === -1) { console.log("quotewizard: state error"); return false }
+	userData.location = leadInfo.slice(fromPosition + 19, toPosition-1); 
 
 	fromPosition = leadInfo.indexOf("DATE OF BIRTH");
 	toPosition = leadInfo.indexOf("GENDER");
-	if(fromPosition === -1 || toPosition === -1) { console.log("date error"); return false }
-	leadInfoObj.dateOfBirth = leadInfo.slice(fromPosition + 14, toPosition-1); 
+	if(fromPosition === -1 || toPosition === -1) { console.log("quotewizard: date error"); return false }
+	userData.birth = leadInfo.slice(fromPosition + 14, toPosition-1); 
 
 	fromPosition = leadInfo.indexOf("GENDER");
 	toPosition = leadInfo.indexOf("Coverage");
-	if(fromPosition === -1 || toPosition === -1) { console.log("gender error"); return false }
-	leadInfoObj.gender = leadInfo.slice(fromPosition + 7, toPosition-1);
+	if(fromPosition === -1 || toPosition === -1) { console.log("quotewizard: gender error"); return false }
+	userData.gender = leadInfo.slice(fromPosition + 7, toPosition-1);
 
 	fromPosition = leadInfo.indexOf("COVERAGE TYPE");
 	toPosition = leadInfo.indexOf("IS MEDICARE");
-	if(fromPosition === -1 || toPosition === -1) { console.log("coverage error"); return false }
-	leadInfoObj.coverageType = leadInfo.slice(fromPosition + 14, toPosition-1);
+	if(fromPosition === -1 || toPosition === -1) { console.log("quotewizard: coverage error"); return false }
+	//userData.coverageType = leadInfo.slice(fromPosition + 14, toPosition-1);
 
 	fromPosition = leadInfo.indexOf("IS MEDICARE");
-	if(fromPosition === -1 ) { console.log("medicare error"); return false }
-	leadInfoObj.isMedicare = leadInfo.slice(fromPosition + 12, fromPosition + 17) === "True" ? 1 : 0 ;
+	if(fromPosition === -1 ) { console.log("quotewizard: medicare error"); return false }
+	//userData.isMedicare = leadInfo.slice(fromPosition + 12, fromPosition + 17) === "True" ? 1 : 0 ;
+
+	return userData;
+}
+async function email_content_parse(emailContent: ParsedMail) {
+
+	// const emailText: String = new String(emailContent);
+	const emailText: String = emailContent.text;
+	console.log("======== email content =========", emailText);
+
+	let userData: any;
+	switch(1) {
+		case 1:
+			userData = await email_parse_from_quotewizard(emailText);
+			if( userData !== false ) break;
+		default:
+			return false;
+	}
+	
 	// 3. Register in DB
-  console.log("<<<<<<< Lead Info >>>>>>>>", leadInfoObj)
+  console.log("<<<<<<< Prospect Info >>>>>>>>", userData)
 
-	if(leadInfoObj.coverageType !== "Medicare") { console.log("coverage type is not 'Medicare'"); return false }
-
-	console.log("<<<<<<< Lead Info >>>>>>>>", leadInfoObj)
-    
-    validateEmailDomain(leadInfoObj.email);
-
-    const userData = {
-      emails: [{ address: s.trim(leadInfoObj.email.toLowerCase()), verify: false }],
-      name: leadInfoObj.name,
-      type: "client",
-      roles: ["client"],
-      gender: leadInfoObj.gender,
-      state: leadInfoObj.cityStateZip,
-      street: leadInfoObj.address,
-      phone: leadInfoObj.phone,
-      birth: leadInfoObj.dateOfBirth,
-    };
+	validateEmailDomain(userData.email);
   
-    let userId;
-    try {
-      // Check if user has already been imported and never logged in. If so, set password and let it through
-      const importedUser = Users.findOneByEmailAddress(leadInfoObj.email);
-      console.log(importedUser)
-      if (
-        importedUser &&
-        importedUser.importIds &&
-        importedUser.importIds.length &&
-        !importedUser.lastLogin
-      ) {
-        // Accounts.setPassword(importedUser._id, userData.password);
-        userId = importedUser._id;
-      } else {
-        userId = Users.create(userData);
-      }
-    } catch (e) {
-      console.log("=========error message========", e.message);
-    }
+	let userId;
+	try {
+		// Check if user has already been imported and never logged in. If so, set password and let it through
+		const importedUser = Users.findOneByEmailAddress(userData.email);
+		console.log(importedUser)
+		if (
+			importedUser &&
+			importedUser.importIds &&
+			importedUser.importIds.length &&
+			!importedUser.lastLogin
+		) {
+			// Accounts.setPassword(importedUser._id, userData.password);
+			userId = importedUser._id;
+		} else {
+			userId = Users.create(userData);
+		}
+	} catch (e) {
+		console.log("=========error message========", e.message);
+	}
 
-    return userId;
+	return userId;
 }
 
 export async function onEmailReceived(email: ParsedMail, inbox: string, department = ''): Promise<void> {

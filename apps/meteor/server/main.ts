@@ -50,8 +50,7 @@ import './methods/readMessages';
 import './methods/readThreads';
 import './methods/registerUser';
 // new method
-import './methods/registerClient';
-import './methods/registerLead';
+import './methods/registerProspect';
 //
 import './methods/removeRoomLeader';
 import './methods/removeRoomModerator';
