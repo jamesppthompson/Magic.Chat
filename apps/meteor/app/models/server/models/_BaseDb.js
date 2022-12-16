@@ -8,14 +8,15 @@ import { trash } from '../../../../server/database/trash';
 const baseName = 'rocketchat_';
 
 export class BaseDb {
-	constructor(model, baseModel, options = {}) {
+	constructor(model, baseModel, options = {}, nameType) {
 		const collectionName = Match.test(model, String) ? baseName + model : model._name;
 
 		this.collectionName = collectionName;
 
 		if (Match.test(model, String)) {
 			this.name = model;
-			this.collectionName = this.baseName + this.name;
+			if(nameType === true) this.collectionName = this.name;
+			else this.collectionName = this.baseName + this.name;
 			this.model = new Mongo.Collection(this.collectionName);
 		} else {
 			this.name = model._name;

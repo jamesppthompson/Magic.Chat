@@ -19,7 +19,7 @@ import { TAPi18n } from 'meteor/rocketchat:tap-i18n';
 import type { IExportOperation, IPersonalAccessToken, IUser } from '@rocket.chat/core-typings';
 import { Users as UsersRaw } from '@rocket.chat/models';
 
-import { Users, Subscriptions } from '../../../models/server';
+import { Users, Subscriptions, Prospects } from '../../../models/server';
 import { hasPermission } from '../../../authorization/server';
 import { settings } from '../../../settings/server';
 import {
@@ -670,7 +670,7 @@ API.v1.addRoute(
 			// Now set their username 
 			const { fields } = this.parseJsonQuery();
 
-			return API.v1.success({ user: Users.findOneById(userId, { fields }) });
+			return API.v1.success({ prospect: Prospects.findOneById(userId, { fields }) });
 		},
 	},
 );

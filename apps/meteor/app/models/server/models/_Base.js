@@ -5,8 +5,8 @@ import _ from 'underscore';
 import { BaseDb } from './_BaseDb';
 
 export class Base {
-	constructor(nameOrModel, options) {
-		this._db = new BaseDb(nameOrModel, this, options);
+	constructor(nameOrModel, options, nameType = false) {
+		this._db = new BaseDb(nameOrModel, this, options, nameType);
 		this.model = this._db.model;
 		this.collectionName = this._db.collectionName;
 		this.name = this._db.name;

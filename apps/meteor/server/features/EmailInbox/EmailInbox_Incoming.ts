@@ -16,7 +16,7 @@ import { logger } from './logger';
 import { Meteor } from "meteor/meteor";
 import { Accounts } from "meteor/accounts-base";
 import s from "underscore.string";
-import { Users } from "../../../app/models/server";
+import { Prospects } from "../../../app/models/server";
 import {
   validateEmailDomain,
 } from "../../../app/lib";
@@ -41,6 +41,48 @@ type FileAttachment = {
 
 const language = settings.get<string>('Language') || 'en';
 const t = (s: string): string => TAPi18n.__(s, { lng: language });
+
+let userData = {
+	name: "", // Name // string
+	email: "", // string
+	phone: "", // Phone  // strings
+	prospectType: "",  // Type  // string
+	location: "", // Location  // string
+	street: "" , // Street Address  // string
+
+	gender: "", // Gender // Male or Female
+	birth: "", //Birthday // date - 08/19/1950
+	height: "", // Height  // string
+	weight: "", // Weight  // string
+	tobacco: "", // Tobacco?  // No or Yes string
+	relation: "", // Relation  // string
+
+
+	maritalStatus: "", // Marital Status  // string
+	preexistingConditions: "", // Pre-existing Conditions  // Yes or No string
+	typeOfCondition: "", // Type of Condition  // string
+	peopleInHousehold: "", // People in Household  // digits
+	annualIncome: "", // Annual Income  // string
+
+	selfEmployed: "", // self Employed  // Yes or No string
+	qualifyingLifeEvent: "", // Qualifying Life Event  // Yes or No string
+	expectantParent: "", // Expectant parent   // Yes or No string
+	medications : "", // Medications // string
+	healthOfCondition: "", // Health Conditions  // string
+	deniedCoverage: "", // Denied Coverage in the Past 12 Months?  // Yes or No string
+	treatedByPhysician: "", // Treated By Physician in the Past 12 Months?  // Yes or No string 
+	planTypes: "", // Plan Types  // string
+	optionalCoverage: "", // Optional Coverage  // string
+
+	currentlyInsured: "",  // Currently Insured  // Yes or No string 
+	policyExpires: "",  // Policy Expires  // string
+	coveredFor: "",  // Covered For  // string
+	currentProvider: "",  // Current Provider  // string
+	
+	type: "prospect",  // not show  // string
+	leadVendor: "",
+	campaign: "",
+};
 
 async function getGuestByEmail(email: string, name: string, department = ''): Promise<ILivechatVisitor | null> {
 	logger.debug(`Attempt to register a guest for ${email} on department: ${department}`);
@@ -143,47 +185,7 @@ async function email_parse_from_quotewizard(emailText: String) {
 	if(position === -1) { console.log("quotewizard: scraper error"); return false; }
 
 	// 2. email parser from emailText, return object
-	let userData = {
-		name: "", // Name // string
-		emails: {}, // Email // object
-		email: "", // string
-		phone: "", // Phone  // strings
-		prospectType: "",  // Type  // string
-		location: "", // Location  // string
-		street: "" , // Street Address  // string
-
-		gender: "", // Gender // Male or Female
-		birth: "", //Birthday // date - 08/19/1950
-		height: "", // Height  // string
-		weight: "", // Weight  // string
-		tobacco: "", // Tobacco?  // No or Yes string
-		relation: "", // Relation  // string
-
-
-		maritalStatus: "", // Marital Status  // string
-		preexistingConditions: "", // Pre-existing Conditions  // Yes or No string
-		typeOfCondition: "", // Type of Condition  // string
-		peopleInHousehold: "", // People in Household  // digits
-		annualIncome: "", // Annual Income  // string
-
-		selfEmployed: "", // self Employed  // Yes or No string
-		qualifyingLifeEvent: "", // Qualifying Life Event  // Yes or No string
-		expectantParent: "", // Expectant parent   // Yes or No string
-		medications : "", // Medications // string
-		healthOfCondition: "", // Health Conditions  // string
-		deniedCoverage: "", // Denied Coverage in the Past 12 Months?  // Yes or No string
-		treatedByPhysician: "", // Treated By Physician in the Past 12 Months?  // Yes or No string 
-		planTypes: "", // Plan Types  // string
-		optionalCoverage: "", // Optional Coverage  // string
-
-		currentlyInsured: "",  // Currently Insured  // Yes or No string 
-		policyExpires: "",  // Policy Expires  // string
-		coveredFor: "",  // Covered For  // string
-		currentProvider: "",  // Current Provider  // string
-		
-		type: "prospect",  // not show  // string
-		roles: ["prospect"],
-	};
+	
 	// 2.1 find lead info in email content
 	let fromPosition: number, toPosition: number, leadInfo: String 
 	fromPosition = emailText.indexOf("Contact Information");
@@ -200,8 +202,7 @@ async function email_parse_from_quotewizard(emailText: String) {
 	fromPosition = leadInfo.indexOf("EMAIL");
 	toPosition = leadInfo.indexOf("ADDRESS");
 	if(fromPosition === -1 || toPosition === -1) { console.log("quotewizard: email error"); return false }
-	userData.emails = [{ address: s.trim((leadInfo.slice(fromPosition + 6, toPosition-1)).toLowerCase()), verify: false }] ;
-  userData.email = s.trim((leadInfo.slice(fromPosition + 6, toPosition-1)).toLowerCase());
+  	userData.email = s.trim((leadInfo.slice(fromPosition + 6, toPosition-1)).toLowerCase());
 
 	fromPosition = leadInfo.indexOf("ADDRESS");
 	toPosition = leadInfo.indexOf("PHONE");
@@ -237,7 +238,8 @@ async function email_parse_from_quotewizard(emailText: String) {
 	if(fromPosition === -1 ) { console.log("quotewizard: medicare error"); return false }
 	//userData.isMedicare = leadInfo.slice(fromPosition + 12, fromPosition + 17) === "True" ? 1 : 0 ;
 
-	return userData;
+	userData.leadVendor = "Quote Wizard";
+	return true;
 }
 async function email_content_parse(emailContent: ParsedMail) {
 
@@ -245,35 +247,29 @@ async function email_content_parse(emailContent: ParsedMail) {
 	const emailText: String = emailContent.text;
 	console.log("======== email content =========", emailText);
 
-	let userData: any;
 	switch(1) {
 		case 1:
-			userData = await email_parse_from_quotewizard(emailText);
-			if( userData !== false ) break;
+			if( await email_parse_from_quotewizard(emailText) !== false ) break;
 		default:
 			return false;
 	}
 	
 	// 3. Register in DB
-  console.log("<<<<<<< Prospect Info >>>>>>>>", userData)
+ 	console.log("<<<<<<< Prospect Info >>>>>>>>", userData)
 
 	validateEmailDomain(userData.email);
   
 	let userId;
 	try {
 		// Check if user has already been imported and never logged in. If so, set password and let it through
-		const importedUser = Users.findOneByEmailAddress(userData.email);
-		console.log(importedUser)
+		const importedUser = Prospects.findOneByEmailAddress(userData.email);
 		if (
-			importedUser &&
-			importedUser.importIds &&
-			importedUser.importIds.length &&
-			!importedUser.lastLogin
+			importedUser 
 		) {
 			// Accounts.setPassword(importedUser._id, userData.password);
 			userId = importedUser._id;
 		} else {
-			userId = Users.create(userData);
+			userId = Prospects.create(userData);
 		}
 	} catch (e) {
 		console.log("=========error message========", e.message);

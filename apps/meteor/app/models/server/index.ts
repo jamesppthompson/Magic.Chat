@@ -4,6 +4,7 @@ import Messages from './models/Messages';
 import Rooms from './models/Rooms';
 import Subscriptions from './models/Subscriptions';
 import Users from './models/Users';
+import Prospects from './models/Prospects';
 import Imports from './models/Imports';
 import LivechatDepartment from './models/LivechatDepartment';
 import LivechatDepartmentAgents from './models/LivechatDepartmentAgents';
@@ -29,4 +30,5 @@ export {
 	LivechatRooms,
 	LivechatInquiry,
 	ImportData,
+	Prospects,
 };
